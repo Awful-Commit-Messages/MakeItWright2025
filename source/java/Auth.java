@@ -13,7 +13,7 @@ public class Auth {
      * @throws NoSuchAlgorithmException Throws if SHA-256 is not a valid hashing algo (It is)
      * Credit: https://www.geeksforgeeks.org/sha-256-hash-in-java/
      */
-    public static String hash(ArrayList<Integer> noteInput, String salt) throws NoSuchAlgorithmException {
+    public String hash(ArrayList<Integer> noteInput, String salt) throws NoSuchAlgorithmException {
         // Create digest for algo
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         StringBuilder noteString = new StringBuilder();
@@ -47,12 +47,14 @@ public class Auth {
      * @return Boolean status if authentication was successful.
      * @throws NoSuchAlgorithmException Throws if SHA-256 is not a valid hashing algo (It is)
      */
-    public static boolean authenticate(ArrayList<Integer> noteInput, User user) throws NoSuchAlgorithmException {
+    public boolean authenticate(ArrayList<Integer> noteInput, User user) throws NoSuchAlgorithmException {
         // Get truth hash and user salt from user object
         String userSalt = user.getSalt();
         String userHash = user.getHash();
 
         // Check for hash equality
+        System.out.println(hash(noteInput, userSalt));
+        System.out.println(userHash);
         return hash(noteInput, userSalt).equals(userHash);
     }
 }
