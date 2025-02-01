@@ -1,6 +1,6 @@
 # MIDI Project
 
-Utilizing the MIDI Java library to accept input from a MIDI (midi 25) device.
+Utilizing the MIDI Java library to accept input from a MIDI (midi 25) device. Presentation and videos can be found [here](./presentation).
 
 ## Maven for Beginners
 
