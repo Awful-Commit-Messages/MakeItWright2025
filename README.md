@@ -1,4 +1,5 @@
 # MIDI Project
+
 Utilizing the MIDI Java library to accept input from a MIDI (midi 25) device.
 
 ## Maven for Beginners
@@ -18,12 +19,25 @@ Utilizing the MIDI Java library to accept input from a MIDI (midi 25) device.
 5. Connect the # of Destiny to the sound of sounds: `aconnect 28:0 128:0`
 6. Slam face into ivories for happiness.
 
+## How2Win w/ Docker
+
+I ship it.
+
+1. `docker build -t acm -f ./src/docker/Dockerfile .`
+2. `docker run acm -it`
+3. `docker save acm:latest | gzip > ./docker-image/acm.tar.gz`
+4. Place 1st place in the Hackathon, naturally.
+5. Get our own office!
+
 ## Group Members
+
 - Adrien Abbey
 - Kyle Cox
 - Sean Fricke
 - Joshua Dennis
+- ChatGPT
 
 ## Scope
+
 - Docker containerization
 - Usage of the MIDI library to accomplish a function
