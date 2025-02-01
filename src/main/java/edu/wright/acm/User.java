@@ -1,3 +1,5 @@
+package edu.wright.acm;
+
 import com.google.gson.*;
 public class User {
     private String username; // user's username
