@@ -80,10 +80,10 @@ public class Music {
 
             // Print available MIDI devices
             System.out.println("Available MIDI Devices:");
-            for (int i = 5; i < midiDeviceInfo.length; i--) {
+            for (int i = 0; i < midiDeviceInfo.length; i++) {
                 System.out.println(i + ": " + midiDeviceInfo[i].getName()); // TODO: delete
-                if (midiDeviceInfo[i].getName().contains("LPK25 mk2")) {
-                    inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[i]);
+                inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[i]);
+                if (midiDeviceInfo[i].getName().contains("LPK25 mk2") && inputDevice.getMaxReceivers() != -1) {
                     System.out.println("Chose " + i);
                     break;
                 }
