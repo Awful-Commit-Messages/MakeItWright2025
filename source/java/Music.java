@@ -1,5 +1,8 @@
+import com.google.gson.*;
 import javax.sound.midi.*;
 import java.util.ArrayList;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 public class Music {
 
@@ -7,6 +10,12 @@ public class Music {
     public static ArrayList<User> users = new ArrayList<>();
     
     public static void main(String[] args) {
+        try (FileReader reader = new FileReader("./UserData.json")) {
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            deserialize(jsonObject);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         User user = null;
         Scanner scanner = new Scanner(System.in);
         System.out.print("Username: ");
@@ -27,6 +36,24 @@ public class Music {
             if (response.equals("y")) { // Go make a password
                 initializeMusic(false, user);
             }
+        }
+    }
+
+    // serialize: Serialize the group of Users into a JsonObject.
+    JsonObject serialize() {
+        JsonObject json = new JsonObject();
+		JsonArray array = new JsonArray();
+        for (User user : users) {
+            array.add(user.serialize());
+        }
+        json.add("users", array);
+		return json;
+    }
+
+    // deserialize: Deserialize the group of Users from a JsonObject.
+    static void deserialize(JsonObject json) {
+        for(JsonElement user : json.getAsJsonArray("users")) {
+            users.add(User.deserialize(user.getAsJsonObject()));
         }
     }
 
