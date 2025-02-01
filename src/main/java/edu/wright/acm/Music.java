@@ -148,7 +148,6 @@ public class Music {
     private static void playNote(int note, int velocity, boolean checkingPassword, String username, User user) {
         try {
             System.out.println("This is where I would put my synthesizer... IF I HAD ONE");
-            /* This is where I would put my synthesizer... IF I HAD ONE
             // Create a synthesizer instance
             Synthesizer synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
@@ -156,13 +155,12 @@ public class Music {
             MidiChannel channel = synthesizer.getChannels()[0]; // Use channel 0 for the synthesizer
 
             // Play the note on the channel
-            channel.noteOn(note, velocity); // Note, velocity
+            //channel.noteOn(note, velocity); // Note, velocity
 
             // Give time for the note to be played
             Thread.sleep(200); // Play the note for 200 ms
             synthesizer.close(); // Close the synthesizer when done
-            channel.noteOff(note, velocity);
-            */
+            //channel.noteOff(note, velocity);
             // TODO: Need to find a way to only make it so whenever the user is done typing
             // a password
             if (checkingPassword) {
