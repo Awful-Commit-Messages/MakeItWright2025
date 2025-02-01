@@ -163,10 +163,9 @@ public class Music {
 
             // TODO: Need to find a way to only make it so whenever the user is done typing
             // a password
-            Auth authenticator = new Auth();
             if (checkingPassword) {
                 try {
-                    if (authenticator.authenticate(pressedButtons, user)) {
+                    if (Auth.authenticate(pressedButtons, user)) {
                         System.out.println("You successfully logged into " + user.getUsername() + "'s account.");
 
                     } else {
@@ -179,7 +178,7 @@ public class Music {
                 Random rng = new Random();
                 String salt = "" + (rng.nextInt() * rng.nextInt());
                 try (FileWriter writer = new FileWriter("./UserData.json")) {
-                    user = new User(username, salt, authenticator.hash(pressedButtons, salt));
+                    user = new User(username, salt, Auth.hash(pressedButtons, salt));
                     users.add(user);
                     Gson gson = new Gson();
                     gson.toJson(serialize(), writer);
