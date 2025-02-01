@@ -7,6 +7,7 @@ WORKDIR /app/
 # Copy the local files to the container:
 COPY ./src/docker/oh-em-gee.sh .
 COPY ./target/makeitwright2025-1.0-SNAPSHOT-jar-with-dependencies.jar .
+COPY ./UserData.json .
 
 # Install dependencies:
 RUN apt-get update
