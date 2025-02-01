@@ -10,6 +10,7 @@ COPY . ../../app/
 # Install dependencies:
 RUN apt-get update
 RUN apt-get install openjdk-21-jre -y
+RUN apt-get install fluidsynth fluid-soundfont-gm alsa-utils -y
 
 # Define the command to run the app:
 CMD ["echo", "hi"]
