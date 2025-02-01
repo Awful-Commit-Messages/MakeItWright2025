@@ -1,7 +1,9 @@
 import com.google.gson.*;
 import javax.sound.midi.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 public class Music {
@@ -28,19 +30,19 @@ public class Music {
         }
         if (user != null) { // Looking for password
             System.out.println("Play your password!");
-            initializeMusic(true, user);
+            initializeMusic(true, username, user);
         } else { // Ask if they want to make a new account
             System.out.print("No user detected. Do you want to make an account? (y/n) ");
             String response = scanner.nextLine();
             scanner.close();
             if (response.equals("y")) { // Go make a password
-                initializeMusic(false, user);
+                initializeMusic(false, username, user);
             }
         }
     }
 
     // serialize: Serialize the group of Users into a JsonObject.
-    JsonObject serialize() {
+    static JsonObject serialize() {
         JsonObject json = new JsonObject();
 		JsonArray array = new JsonArray();
         for (User user : users) {
@@ -58,9 +60,10 @@ public class Music {
     }
 
     // initializeMusic: Initialize the music player; boolean is based on if the password is being checked or not.
-    //  Parameters - checkingPassword: if the password is being checked for, or is just being entered
+    //  Parameters - checkingPassword: If the password is being checked for, or is just being entered
+    //               username: The username of the user, relevant if you are making a new account
     //               user: The user being logged into, OR null if making a new user
-    public static void initializeMusic(boolean checkingPassword, User user) {
+    public static void initializeMusic(boolean checkingPassword, String username, User user) {
         try {
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
             MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case none is found
@@ -96,7 +99,7 @@ public class Music {
                             System.out.println(pressedButtons); // TODO: delete
                             int velocity = shortMessage.getData2(); // Volume (0-127)
                             System.out.println("Note ON: " + note + " Velocity: " + velocity); // TODO: delete
-                            playNote(note, velocity);
+                            playNote(note, velocity, checkingPassword, username, user);
                         }
                     }
                 }
@@ -135,7 +138,7 @@ public class Music {
     // playNote: Play a note; method is executed whenever a key is pressed.
     //  Parameters - note: the note number
     //               velocity: the sound to be played
-    private static void playNote(int note, int velocity) {
+    private static void playNote(int note, int velocity, boolean checkingPassword, String username, User user) {
         try {
             // Create a synthesizer instance
             Synthesizer synthesizer = MidiSystem.getSynthesizer();
@@ -150,6 +153,33 @@ public class Music {
             Thread.sleep(200); // Play the note for 200 ms
             synthesizer.close(); // Close the synthesizer when done
             channel.noteOff(note, velocity);
+
+            // TODO: Need to find a way to only make it so whenever the user is done typing a password
+            Auth authenticator = new Auth();
+            if (checkingPassword) {
+                try {
+                    if (authenticator.authenticate(pressedButtons, user)) {
+                        System.out.println("You successfully logged into " + user.getUsername() + "'s account.");
+
+                    } else {
+                        System.out.println("You got " + user.getUsername() + "'s password wrong. How could you?!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Random rng = new Random();
+                String salt = ""+(rng.nextInt()*rng.nextInt());
+                try(FileWriter writer = new FileWriter("./UserData.json")) {
+                user = new User(username, salt, authenticator.hash(pressedButtons, salt));
+                users.add(user);
+                Gson gson = new Gson();
+                gson.toJson(serialize(), writer);
+                System.out.println("Registered new user " + username + ".");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

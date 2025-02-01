@@ -1,9 +1,1 @@
-{
-    "users": [
-        {
-            "username": "Kyle",
-            "salt": "Test",
-            "hash": "Password"
-        }
-    ]
-}
+{"users":[{"username":"Kyle","salt":"Test","hash":"Password"},{"username":"Tester","salt":"-201483900","hash":"dcc81226db2fb2e94dd4162d000bd17619c60315c76707316d48009d3757c656"}]}
