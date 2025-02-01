@@ -81,13 +81,13 @@ public class Music {
             Synthesizer synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
 
-            MidiChannel channel = synthesizer.getChannels()[0]; // Use channel 0
+            MidiChannel channel = synthesizer.getChannels()[0]; // Use channel 0 for the synthesizer
 
             // Play the note on the channel
             channel.noteOn(note, velocity); // Note, velocity
 
             // Give time for the note to be played
-            Thread.sleep(200); // Play the note for 5 ms
+            Thread.sleep(200); // Play the note for 200 ms
             synthesizer.close(); // Close the synthesizer when done
             channel.noteOff(note, velocity);
         } catch (Exception e) {
