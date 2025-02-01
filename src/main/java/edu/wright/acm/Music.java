@@ -147,8 +147,18 @@ public class Music {
     // velocity: the sound to be played
     private static void playNote(int note, int velocity, boolean checkingPassword, String username, User user) {
         try {
-            // Create a synthesizer instance
-            Synthesizer synthesizer = MidiSystem.getSynthesizer();
+            Synthesizer synthesizer = MidiSystem.getSynthesizer(); // default in case of no find
+            // Create a synthesizer instance, find the specific one we need
+            MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
+            for (MidiDevice.Info info : midiDeviceInfo) {
+                MidiDevice device = MidiSystem.getMidiDevice(info);
+                if (device instanceof Synthesizer) {
+                    if (info.getName().contains("FLUID Synth")) {
+                        synthesizer = (Synthesizer) device;
+                    }
+                }
+            }
+
             synthesizer.open();
 
             MidiChannel channel = synthesizer.getChannels()[0]; // Use channel 0 for the synthesizer
