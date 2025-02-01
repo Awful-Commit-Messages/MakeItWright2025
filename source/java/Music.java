@@ -1,14 +1,39 @@
 import javax.sound.midi.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 public class Music {
 
-    public static ArrayList<Integer> pressedButtons = new ArrayList<>();
+    public static ArrayList<Integer> pressedButtons = new ArrayList<>(); // Array tracking
+    public static ArrayList<User> users = new ArrayList<>();
     
     public static void main(String[] args) {
-        initializeMusic();
+        User user = null;
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+        for (User thisUser : users) {
+            if (thisUser.getUsername().equals(username)) {
+                user = thisUser; // User found to find a password for!
+                break;
+            }
+        }
+        if (user != null) { // Looking for password
+            System.out.println("Play your password!");
+            initializeMusic(true, user);
+        } else { // Ask if they want to make a new account
+            System.out.print("No user detected. Do you want to make an account? (y/n) ");
+            String response = scanner.nextLine();
+            scanner.close();
+            if (response.equals("y")) { // Go make a password
+                initializeMusic(false, user);
+            }
+        }
     }
 
-    public static void initializeMusic() {
+    // initializeMusic: Initialize the music player; boolean is based on if the password is being checked or not.
+    //  Parameters - checkingPassword: if the password is being checked for, or is just being entered
+    //               user: The user being logged into, OR null if making a new user
+    public static void initializeMusic(boolean checkingPassword, User user) {
         try {
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
             MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case none is found
@@ -20,7 +45,7 @@ public class Music {
             // Print available MIDI devices
             System.out.println("Available MIDI Devices:");
             for (int i = 5; i < midiDeviceInfo.length; i--) {
-                System.out.println(i + ": " + midiDeviceInfo[i].getName());
+                System.out.println(i + ": " + midiDeviceInfo[i].getName()); // TODO: delete
                 if (midiDeviceInfo[i].getName().contains("LPK25 mk2")) {
                     inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[i]);
                     System.out.println("Chose " + i);
@@ -33,20 +58,17 @@ public class Music {
             Receiver receiver = new Receiver() {
                 @Override
                 public void send(MidiMessage message, long timeStamp) {
-                    // Check if the message is a 'note on', as that means it is pressed for the user to play sound
+                    // Check if the message is a pressed note, as that means it is pressed for the user to play sound
                     if (message instanceof ShortMessage) {
                         ShortMessage shortMessage = (ShortMessage) message;
                         int command = shortMessage.getCommand();
-
-                        // MIDI 'note on' is 144, and 'note off' is 128
                         if (command == ShortMessage.NOTE_ON) {
-                            int note = shortMessage.getData1(); // Note number (60 is Middle C)
+                            int note = shortMessage.getData1(); // Note number
                             int modNote = (note % 25);
                             pressedButtons.add(modNote);
-                            System.out.println(pressedButtons);
+                            System.out.println(pressedButtons); // TODO: delete
                             int velocity = shortMessage.getData2(); // Volume (0-127)
-                            System.out.println("Note ON: " + note + " Velocity: " + velocity);
-                            // Play the note using the synthesizer
+                            System.out.println("Note ON: " + note + " Velocity: " + velocity); // TODO: delete
                             playNote(note, velocity);
                         }
                     }
