@@ -24,7 +24,7 @@ Utilizing the MIDI Java library to accept input from a MIDI (midi 25) device.
 I ship it.
 
 1. `docker build -t acm -f ./src/docker/Dockerfile .`
-2. `docker run acm -it`
+2. `docker run -it acm`
 3. `docker save acm:latest | gzip > ./docker-image/acm.tar.gz`
 4. Place 1st place in the Hackathon, naturally.
 5. Get our own office!
