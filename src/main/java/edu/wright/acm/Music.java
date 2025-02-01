@@ -8,11 +8,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+
 public class Music {
 
     public static ArrayList<Integer> pressedButtons = new ArrayList<>(); // Array tracking
     public static ArrayList<User> users = new ArrayList<>();
-    
+
     public static void main(String[] args) {
         try (FileReader reader = new FileReader("./UserData.json")) {
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
@@ -46,29 +47,32 @@ public class Music {
     // serialize: Serialize the group of Users into a JsonObject.
     static JsonObject serialize() {
         JsonObject json = new JsonObject();
-		JsonArray array = new JsonArray();
+        JsonArray array = new JsonArray();
         for (User user : users) {
             array.add(user.serialize());
         }
         json.add("users", array);
-		return json;
+        return json;
     }
 
     // deserialize: Deserialize the group of Users from a JsonObject.
     static void deserialize(JsonObject json) {
-        for(JsonElement user : json.getAsJsonArray("users")) {
+        for (JsonElement user : json.getAsJsonArray("users")) {
             users.add(User.deserialize(user.getAsJsonObject()));
         }
     }
 
-    // initializeMusic: Initialize the music player; boolean is based on if the password is being checked or not.
-    //  Parameters - checkingPassword: If the password is being checked for, or is just being entered
-    //               username: The username of the user, relevant if you are making a new account
-    //               user: The user being logged into, OR null if making a new user
+    // initializeMusic: Initialize the music player; boolean is based on if the
+    // password is being checked or not.
+    // Parameters - checkingPassword: If the password is being checked for, or is
+    // just being entered
+    // username: The username of the user, relevant if you are making a new account
+    // user: The user being logged into, OR null if making a new user
     public static void initializeMusic(boolean checkingPassword, String username, User user) {
         try {
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
-            MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case none is found
+            MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case
+                                                                                                  // none is found
             if (midiDeviceInfo.length == 0) {
                 System.out.println("No MIDI devices found.");
                 return;
@@ -90,7 +94,8 @@ public class Music {
             Receiver receiver = new Receiver() {
                 @Override
                 public void send(MidiMessage message, long timeStamp) {
-                    // Check if the message is a pressed note, as that means it is pressed for the user to play sound
+                    // Check if the message is a pressed note, as that means it is pressed for the
+                    // user to play sound
                     if (message instanceof ShortMessage) {
                         ShortMessage shortMessage = (ShortMessage) message;
                         int command = shortMessage.getCommand();
@@ -138,8 +143,8 @@ public class Music {
     }
 
     // playNote: Play a note; method is executed whenever a key is pressed.
-    //  Parameters - note: the note number
-    //               velocity: the sound to be played
+    // Parameters - note: the note number
+    // velocity: the sound to be played
     private static void playNote(int note, int velocity, boolean checkingPassword, String username, User user) {
         try {
             // Create a synthesizer instance
@@ -156,7 +161,8 @@ public class Music {
             synthesizer.close(); // Close the synthesizer when done
             channel.noteOff(note, velocity);
 
-            // TODO: Need to find a way to only make it so whenever the user is done typing a password
+            // TODO: Need to find a way to only make it so whenever the user is done typing
+            // a password
             Auth authenticator = new Auth();
             if (checkingPassword) {
                 try {
@@ -171,13 +177,13 @@ public class Music {
                 }
             } else {
                 Random rng = new Random();
-                String salt = ""+(rng.nextInt()*rng.nextInt());
-                try(FileWriter writer = new FileWriter("./UserData.json")) {
-                user = new User(username, salt, authenticator.hash(pressedButtons, salt));
-                users.add(user);
-                Gson gson = new Gson();
-                gson.toJson(serialize(), writer);
-                System.out.println("Registered new user " + username + ".");
+                String salt = "" + (rng.nextInt() * rng.nextInt());
+                try (FileWriter writer = new FileWriter("./UserData.json")) {
+                    user = new User(username, salt, authenticator.hash(pressedButtons, salt));
+                    users.add(user);
+                    Gson gson = new Gson();
+                    gson.toJson(serialize(), writer);
+                    System.out.println("Registered new user " + username + ".");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -187,4 +193,3 @@ public class Music {
         }
     }
 }
-

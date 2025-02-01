@@ -9,22 +9,27 @@ public class Auth {
 
     /**
      * Hashing function using SHA256 that is prefixed by a salt before hashing.
-     * @param noteInput Array of integers that represent what notes were inputted during a login attempt.
-     * @param salt Pre-created salt unique to each user.
+     * 
+     * @param noteInput Array of integers that represent what notes were inputted
+     *                  during a login attempt.
+     * @param salt      Pre-created salt unique to each user.
      * @return String of SHA256 hash hex code.
-     * @throws NoSuchAlgorithmException Throws if SHA-256 is not a valid hashing algo (It is)
-     * Credit: https://www.geeksforgeeks.org/sha-256-hash-in-java/
+     * @throws NoSuchAlgorithmException Throws if SHA-256 is not a valid hashing
+     *                                  algo (It is)
+     *                                  Credit:
+     *                                  https://www.geeksforgeeks.org/sha-256-hash-in-java/
      */
     public static String hash(ArrayList<Integer> noteInput, String salt) throws NoSuchAlgorithmException {
         // Create digest for algo
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         StringBuilder noteString = new StringBuilder();
 
-        // Concat list of ints to string, making sure that ALL ints have two digits (even 0, for < 10)
-        for (Integer i : noteInput){
-            if (i < 10){
-                noteString.append("0"+i);
-            } else{
+        // Concat list of ints to string, making sure that ALL ints have two digits
+        // (even 0, for < 10)
+        for (Integer i : noteInput) {
+            if (i < 10) {
+                noteString.append("0" + i);
+            } else {
                 noteString.append(i);
             }
         }
@@ -44,10 +49,13 @@ public class Auth {
 
     /**
      * Authentication for a user with a note password.
-     * @param noteInput Array of integers that represent what notes were inputted during a login attempt.
-     * @param user User object for user that is logging in.
+     * 
+     * @param noteInput Array of integers that represent what notes were inputted
+     *                  during a login attempt.
+     * @param user      User object for user that is logging in.
      * @return Boolean status if authentication was successful.
-     * @throws NoSuchAlgorithmException Throws if SHA-256 is not a valid hashing algo (It is)
+     * @throws NoSuchAlgorithmException Throws if SHA-256 is not a valid hashing
+     *                                  algo (It is)
      */
     public static boolean authenticate(ArrayList<Integer> noteInput, User user) throws NoSuchAlgorithmException {
         // Get truth hash and user salt from user object
