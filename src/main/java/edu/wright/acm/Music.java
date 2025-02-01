@@ -147,14 +147,24 @@ public class Music {
     // velocity: the sound to be played
     private static void playNote(int note, int velocity, boolean checkingPassword, String username, User user) {
         try {
+
+            MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
+            for (MidiDevice.Info info : infos) {
+                System.out.println("Name: " + info.getName()
+                        + ", Description: " + info.getDescription());
+            }
+
             Synthesizer synthesizer = MidiSystem.getSynthesizer(); // default in case of no find
             // Create a synthesizer instance, find the specific one we need
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
             for (MidiDevice.Info info : midiDeviceInfo) {
                 MidiDevice device = MidiSystem.getMidiDevice(info);
+                System.out.println(info.getName()); // FIXME
                 if (device instanceof Synthesizer) {
-                    if (info.getName().contains("FLUID Synth")) {
+                    System.out.println(info.getName()); // FIXME
+                    if (info.getName().contains("mk2")) {
                         synthesizer = (Synthesizer) device;
+                        break;
                     }
                 }
             }
