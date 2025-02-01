@@ -1,6 +1,5 @@
-# Nothing Sus Here
-
-Please ignore.
+# MIDI Project
+Utilizing the MIDI Java library to accept input from a MIDI (midi 25) device.
 
 ## Maven for Beginners
 
@@ -18,3 +17,13 @@ Please ignore.
 4. Determine the # of Destiny: `aconnect -l`
 5. Connect the # of Destiny to the sound of sounds: `aconnect 28:0 128:0`
 6. Slam face into ivories for happiness.
+
+## Group Members
+- Adrien Abbey
+- Kyle Cox
+- Sean Fricke
+- Joshua Dennis
+
+## Scope
+- Docker containerization
+- Usage of the MIDI library to accomplish a function
