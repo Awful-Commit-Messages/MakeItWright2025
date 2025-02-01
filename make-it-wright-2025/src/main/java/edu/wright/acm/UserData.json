@@ -1,0 +1,9 @@
+{
+    "users": [
+        {
+            "username": "Kyle",
+            "salt": "Test",
+            "hash": "Password"
+        }
+    ]
+}

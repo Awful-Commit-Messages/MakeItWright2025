@@ -1,4 +1,7 @@
+package edu.wright.acm;
+
 import com.google.gson.*;
+
 public class User {
     private String username; // user's username
     private String salt; // salt dedicated to this user
@@ -18,22 +21,31 @@ public class User {
         this.hash = hash;
     }
 
-    // Getters for a couple of varaibles
-    public String getSalt() { return salt; }
-    public String getUsername() { return username; }
-    public String getHash() { return hash; }
+    // Getters for a couple of variables
+    public String getSalt() {
+        return salt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getHash() {
+        return hash;
+    }
 
     // serialize: Serialize this user into a JsonObject.
     JsonObject serialize() {
         JsonObject json = new JsonObject();
-		json.addProperty("username", username);
-		json.addProperty("salt", salt);
+        json.addProperty("username", username);
+        json.addProperty("salt", salt);
         json.addProperty("hash", hash);
-		return json;
+        return json;
     }
 
     // deserialize: Deserialize this user from a JsonObject.
     static User deserialize(JsonObject json) {
-        return new User(json.get("username").getAsString(), json.get("salt").getAsString(), json.get("hash").getAsString());
+        return new User(json.get("username").getAsString(), json.get("salt").getAsString(),
+                json.get("hash").getAsString());
     }
 }

@@ -1,14 +1,17 @@
+package edu.wright.acm;
+
 import com.google.gson.*;
 import javax.sound.midi.*;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+
 public class Music {
 
     public static ArrayList<Integer> pressedButtons = new ArrayList<>(); // Array tracking
     public static ArrayList<User> users = new ArrayList<>();
-    
+
     public static void main(String[] args) {
         try (FileReader reader = new FileReader("./UserData.json")) {
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
@@ -42,28 +45,31 @@ public class Music {
     // serialize: Serialize the group of Users into a JsonObject.
     JsonObject serialize() {
         JsonObject json = new JsonObject();
-		JsonArray array = new JsonArray();
+        JsonArray array = new JsonArray();
         for (User user : users) {
             array.add(user.serialize());
         }
         json.add("users", array);
-		return json;
+        return json;
     }
 
     // deserialize: Deserialize the group of Users from a JsonObject.
     static void deserialize(JsonObject json) {
-        for(JsonElement user : json.getAsJsonArray("users")) {
+        for (JsonElement user : json.getAsJsonArray("users")) {
             users.add(User.deserialize(user.getAsJsonObject()));
         }
     }
 
-    // initializeMusic: Initialize the music player; boolean is based on if the password is being checked or not.
-    //  Parameters - checkingPassword: if the password is being checked for, or is just being entered
-    //               user: The user being logged into, OR null if making a new user
+    // initializeMusic: Initialize the music player; boolean is based on if the
+    // password is being checked or not.
+    // Parameters - checkingPassword: if the password is being checked for, or is
+    // just being entered
+    // user: The user being logged into, OR null if making a new user
     public static void initializeMusic(boolean checkingPassword, User user) {
         try {
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
-            MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case none is found
+            MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case
+                                                                                                  // none is found
             if (midiDeviceInfo.length == 0) {
                 System.out.println("No MIDI devices found.");
                 return;
@@ -85,7 +91,8 @@ public class Music {
             Receiver receiver = new Receiver() {
                 @Override
                 public void send(MidiMessage message, long timeStamp) {
-                    // Check if the message is a pressed note, as that means it is pressed for the user to play sound
+                    // Check if the message is a pressed note, as that means it is pressed for the
+                    // user to play sound
                     if (message instanceof ShortMessage) {
                         ShortMessage shortMessage = (ShortMessage) message;
                         int command = shortMessage.getCommand();
@@ -133,8 +140,8 @@ public class Music {
     }
 
     // playNote: Play a note; method is executed whenever a key is pressed.
-    //  Parameters - note: the note number
-    //               velocity: the sound to be played
+    // Parameters - note: the note number
+    // velocity: the sound to be played
     private static void playNote(int note, int velocity) {
         try {
             // Create a synthesizer instance
@@ -155,4 +162,3 @@ public class Music {
         }
     }
 }
-
