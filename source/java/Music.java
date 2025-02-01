@@ -1,8 +1,14 @@
 import javax.sound.midi.*;
-
+import java.util.ArrayList;
 public class Music {
 
+    public static ArrayList<Integer> pressedButtons = new ArrayList<>();
+    
     public static void main(String[] args) {
+        initializeMusic();
+    }
+
+    public static void initializeMusic() {
         try {
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
             MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case none is found
@@ -35,6 +41,9 @@ public class Music {
                         // MIDI 'note on' is 144, and 'note off' is 128
                         if (command == ShortMessage.NOTE_ON) {
                             int note = shortMessage.getData1(); // Note number (60 is Middle C)
+                            int modNote = (note % 25);
+                            pressedButtons.add(modNote);
+                            System.out.println(pressedButtons);
                             int velocity = shortMessage.getData2(); // Volume (0-127)
                             System.out.println("Note ON: " + note + " Velocity: " + velocity);
                             // Play the note using the synthesizer
@@ -74,7 +83,9 @@ public class Music {
         }
     }
 
-    // playNote: Play a note; meethod is executed whenever a key is pressed.
+    // playNote: Play a note; method is executed whenever a key is pressed.
+    //  Parameters - note: the note number
+    //               velocity: the sound to be played
     private static void playNote(int note, int velocity) {
         try {
             // Create a synthesizer instance
