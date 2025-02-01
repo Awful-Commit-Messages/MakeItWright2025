@@ -1,12 +1,11 @@
 import javax.sound.midi.*;
-import java.util.Scanner;
 
 public class Music {
 
     public static void main(String[] args) {
         try {
             MidiDevice.Info[] midiDeviceInfo = MidiSystem.getMidiDeviceInfo();
-            MidiDevice inputDevice;
+            MidiDevice inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[0]); // default in case none is found
             if (midiDeviceInfo.length == 0) {
                 System.out.println("No MIDI devices found.");
                 return;
@@ -14,15 +13,15 @@ public class Music {
 
             // Print available MIDI devices
             System.out.println("Available MIDI Devices:");
-            for (int i = 0; i < midiDeviceInfo.length; i++) {
+            for (int i = 5; i < midiDeviceInfo.length; i--) {
                 System.out.println(i + ": " + midiDeviceInfo[i].getName());
+                if (midiDeviceInfo[i].getName().contains("LPK25 mk2")) {
+                    inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[i]);
+                    System.out.println("Chose " + i);
+                    break;
+                }
             }
 
-            // Ask for what MIDI device to use
-            Scanner scanner = new Scanner(System.in);
-            int choice = scanner.nextInt();
-            scanner.close();
-            inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[choice]);
             inputDevice.open();
 
             Receiver receiver = new Receiver() {
