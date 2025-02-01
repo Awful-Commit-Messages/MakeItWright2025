@@ -1,28 +1,22 @@
 public class User {
     String username; // user's username
     String salt; // salt dedicated to this user
-    String password; // Hashed password
+    String hash; // Hashed password
 
     // Default case
     public User() {
         username = "USERNAME";
         salt = "SALT";
-        password = "PASSWORD";
+        hash = "HASH";
     }
 
     // User creation case
-    public User(String username, String salt, String password) {
+    public User(String username, String salt, String hash) {
         this.username = username;
         this.salt = salt;
-        this.password = password;
+        this.hash = hash;
     }
 
-    public boolean passwordCheck(String other) {
-        if (password == other) {
-            return true;
-        }
-        return false;
-    }
     public String getSalt() { return salt; }
     public String getUsername() { return username; }
 }
